@@ -1,2 +1,2 @@
-# 2019-video-surveillance
-Analysis of video surveillance to generate useful information with Kafka. (Simón Sepúlveda, Matías Saavedra, Daniel Guzmán)
+# 2019-clashroyale-analytics
+Analysis of Clash Royale matchs to generate useful stadistics. (Simón Sepúlveda, Matías Saavedra, Daniel Guzmán)
