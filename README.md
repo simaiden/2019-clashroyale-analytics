@@ -13,16 +13,16 @@ State what is the main goal of the project. State what sorts of question(s) you 
 
 We work with a Clash Royale Matches dataset which contains about 700k records of matches in <code>.json</code> format. The dataset starts at 2017 - 07 - 12. The dataset can be found in Kaggle at <url> https://www.kaggle.com/s1m0n38/clash-royale-matches-dataset </url> .
 
-This dataset was chosen because 66.666% of the team are active players and have a lot of fun, and also frustration when lose, with Clash Royale. The 33.333% remaining are afraid of the fame and sex appeal generate the game in players.
+This dataset was chosen because 66.666% of the team are active players and have a lot of fun and also frustration when losing with Clash Royale. The 33.333% remaining are afraid of the fame and sex appeal the game generates on players.
 
 Each tuple of the dataset looks like:
 
 <code>{'players': {'right': {'deck': [['Mega Minion', '9'], ['Electro Wizard', '3'], ['Arrows', '11'], ['Lightning', '5'], ['Tombstone', '9'], ['The Log', '2'], ['Giant', '9'], ['Bowler', '5']], 'trophy': '4258', 'clan': 'TwoFiveOne', 'name': 'gpa raid'}, 'left': {'deck': [['Fireball', '9'], ['Archers', '12'], ['Goblins', '12'], ['Minions', '11'], ['Bomber', '12'], ['The Log', '2'], ['Barbarians', '12'], ['Royal Giant', '13']], 'trophy': '4325', 'clan': 'battusai', 'name': 'Supr4'}}, 'type': 'ladder', 'result': ['2', '0'], 'time': '2017-07-12'}</code>
 
-Each tuplec contains:
+Each tuple contains:
 - `players`: Can be `left` or `right` player.
   - `left/right`: Only for players reference. Contains:
-    - `deck`: The player deck with their eight cards played and his level.
+    - `deck`: The player deck with their eight cards played and their level.
     - `trophy`: The player ladder trophies. 
     - `clan`: The player clan.
     - `name`: The player name.
@@ -30,12 +30,19 @@ Each tuplec contains:
 - `result`: The result of the match in the format `[left,right]`. It can be all combinations beetween `3-0` and `0-3`.
 - `time`: The date when match was played.
 
-Also we work with a dataset that contains the attributes of each cards as the Elixir cost, the card type, the card damage, etc. This dataset is used only for add useful information but not for (hacer querys). This dataset can be found it at https://www.kaggle.com/swappyk/clash-royale-dataset .
+Also we work with a dataset that contains the attributes of each cards as the Elixir cost, the card type, the card damage, etc. This dataset is used only for add useful information but not for querying. This dataset can be found it at <url>https://www.kaggle.com/swappyk/clash-royale-dataset</url> .
 
 
 Describe the raw dataset that you considered for your project. Where did it come from? Why was it chosen? What information does it contain? What format was it in? What size was it? How many lines/records? Provide links.
 
 ## Methods
+
+MongoDB is used to process the queries made because of its compatibility with the data's format and its already available by the course's faculty members for which this project is developed. 
+
+For each desired statistic a pipeline is designed, which is presented on `Results` with a description of each stage and the resulting table (collection).
+
+Python is used to make the visual representation of the data, because of its ease of use for the team and its variety of methods to further process the data (only for ordering, no further data is collected here). For this,we use the <code>matplotlib</code> library  for plotting, <code>pandas</code> and <code>json</code> for loading the exported results and <code>numpy</code> for data processing. This last library is needed because the results are not always congruent between queries: for example on certain matches or kind of cards not all levels are on the databse because of its rarity, so we need to complete or truncate certain results.
+
 
 Detail the methods used during the project. Provide an overview of the techniques/technologies used, why you used them and how you used them. Refer to the source-code delivered with the project. Describe any problems you encountered.
 
