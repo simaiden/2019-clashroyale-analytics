@@ -1,0 +1,151 @@
+Contar los jugadores distintos que hay en el lado derecho en partidas tipo ladder
+db.matches.distinct("players.right.name", { "type" : "ladder" }).length
+Consultas sobre jugadores 
+
+
+Contar los jugadores distintos que hay en el lado izquierdo en partidas tipo ladder
+db.matches.distinct("players.left.name", { "type" : "ladder" }).length
+
+Cantidad de partidas por jugador en orden descendente.
+db.matches.aggregate([
+   { $match:{'type': 'ladder'}},
+   { $group: { _id: "$players.left.name", count: { $sum: 1 }}},
+   { $project: { _id: 1, count : 1} },
+   { $sort: {count: -1 } }
+])
+
+Como bob era el jugador con más partidas se hace un análisis sobre el. Mazos distintos que usa bob y cantidad de veces que los usa.
+Se crea una función para que sea fácil hacer el mismo análisis para otros jugadores.
+
+function cantMazos(jugador){
+var query = db.matches.aggregate([
+   { $match:{'type': 'ladder'}},
+   { $match:{'players.left.name': jugador}},
+   { $group: { _id: "$players.left.deck", count: { $sum: 1 }}},
+   { $project: { _id: 1, count : 1} },
+   { $sort: {count: -1 } }
+]); 
+return query;
+}
+cantMazos('bob')
+
+Una vez que sabemos el mazo más jugado. Nos interesa saber los resultados que obtuvo con ese mazo. 
+Para eso se utiliza la siguiente query, que entrega la cantidad de veces que se dió cada resultado.
+
+function winrate(jugador, mazo){
+var query = db.matches.aggregate([
+   { $match:{'type': 'ladder'}},
+   { $match:{'players.left.name': jugador}},
+   { $match:{'players.left.deck':mazo}},
+   { $project: { 'players.left.deck':1, 'result' : 1} },
+{ $group: { _id: "$result", count: { $sum: 1 }}},
+{ $sort: {count: -1 } }
+]); 
+return query;
+}
+winrate('bob',   [ [ "Bomber", 13 ], [ "Knight", 13 ], [ "Goblins", 13 ], [ "Arrows", 13 ], [ "Elixir Collector", 11 ], [ "Ice Wizard", 4 ], [ "Witch", 7 ], [ "Giant Skeleton", 7 ] ]) 
+
+Se hace lo mismo para el segundo mazo más usado.
+
+winrate('bob',   [ [ "Elite Barbarians", 13 ], [ "Elixir Collector", 9 ], [ "Archers", 12 ], [ "Knight", 12 ], [ "Fireball", 9 ], [ "Golem", 6 ], [ "Zap", 12 ], [ "Minions", 12 ] ])
+
+De los resultados de las consultas se observa que con el mazo más utilizado obtiene mejor winrate que con el segundo más usado.
+Para ver cuales eran los trofeos que tenía en cada partida con ese mazo se utiliza la siguiente consulta.
+
+function Decktrophies(jugador, mazo){
+var query = db.matches.aggregate([
+   { $match:{'type': 'ladder'}},
+   { $match:{'players.left.name': jugador}},
+   { $match:{'players.left.deck':mazo}},
+   { $project: { 'players.left.deck':1, 'players.left.trophy' : 1} },
+{ $group: { _id: "$players.left.deck", trophies: { $push:  '$players.left.trophy'} }},
+{ $sort: {trophies: -1 } }
+]); 
+return query;
+}
+Decktrophies('bob',   [ [ "Bomber", 13 ], [ "Knight", 13 ], [ "Goblins", 13 ], [ "Arrows", 13 ], [ "Elixir Collector", 11 ], [ "Ice Wizard", 4 ], [ "Witch", 7 ], [ "Giant Skeleton", 7 ] ]) 
+
+Y para el segundo mazo:
+
+Decktrophies('bob',   [ [ "Elite Barbarians", 13 ], [ "Elixir Collector", 9 ], [ "Archers", 12 ], [ "Knight", 12 ], [ "Fireball", 9 ], [ "Golem", 6 ], [ "Zap", 12 ], [ "Minions", 12 ] ]) 
+
+Se observa que bob tenía más trofeos con su mazo favorito, lo que implica que mejoró, cambió su mazo y comenzó a ganar más.
+Se hace el mismo análisis con el segundo jugador con más partidas pero los resultados no son tan interesantes, ya que no cambió tanto de mazo.
+
+
+Consultas sobre cartas
+
+Contar las veces que aparece cada carta en cada lado. Izquierdo y derecho. En orden alfabetico inverso. 
+
+Derecho
+db.matches.aggregate([
+{ $match:{'type': 'ladder'}},
+{ $unwind : "$players.right.deck"},
+{$group : {_id : {$arrayElemAt: [ "$players.right.deck", 0 ]} , count:{$sum:1}}  },
+   { $project: { _id: 1, count : 1} },
+   { $sort: { _id: -1 } }
+])
+
+Izquierdo
+db.matches.aggregate([
+{ $match:{'type': 'ladder'}},
+{ $unwind : "$players.left.deck"},
+{$group : {_id : {$arrayElemAt: [ "$players.left.deck", 0 ]} , count:{$sum:1}}  },
+   { $project: { _id: 1, count : 1} },
+   { $sort: { _id: -1 } }
+])
+
+
+Contar las cartas que utilizan los jugadores que ganaron las respectivas partidas (en partidas tipo ladder). Es decir, cuantas veces aparece cada carta en el lado ganador.
+
+db.matches.aggregate([
+   { $match:{'type': 'ladder'}},
+   {$project: {	"players.left.deck":1, "players.right.deck":1, 	first: { $arrayElemAt: [ "$result", 0 ] }, last: { $arrayElemAt: [ "$result", -1 ] }}},
+   {$project: {winner_deck: { $cond: { if: { $lt: [ "$first", "$last"] }, then: "$players.right.deck", else: { $cond: { if: { $gt: [ "$first", "$last"] }, then: "$players.left.deck", else: null }} }}}},
+   { $unwind : "$winner_deck"},
+{$group : {_id : {$arrayElemAt: [ "$winner_deck", 0 ]} , count:{$sum:1}}  },
+   { $project: { _id: 1, count : 1} },
+   { $sort: { _id: -1 } },
+])
+
+Lo mismo que la consulta anterior pero ahora las cartas están separadas por nivel.
+
+db.matches.aggregate([
+   { $match:{'type': 'ladder'}},
+   {$project: {	"players.left.deck":1, "players.right.deck":1, 	first: { $arrayElemAt: [ "$result", 0 ] }, last: { $arrayElemAt: [ "$result", -1 ] }}},
+   {$project: {winner_deck: { $cond: { if: { $lt: [ "$first", "$last"] }, then: "$players.right.deck", else: { $cond: { if: { $gt: [ "$first", "$last"] }, then: "$players.left.deck", else: null }} }}}},
+   { $unwind : "$winner_deck"},
+   { $group: { _id: "$winner_deck", count: { $sum: 1 }}},
+   { $project: { _id: 1, count : 1} },
+ { $sort: { _id: -1 } },
+{ $group : { _id : { $arrayElemAt: [ "$_id", 0 ] }, levels: { $push: { $arrayElemAt: [ "$_id", 1 ] } }  ,count: { $push: "$count" } } },
+ { $sort: { _id: -1 } }
+])
+
+Se hace lo mismo pero para las cartas en el lado perdedor.
+
+db.matches.aggregate([
+   { $match:{'type': 'ladder'}},
+   {$project: {	"players.left.deck":1, "players.right.deck":1, 	first: { $arrayElemAt: [ "$result", 0 ] }, last: { $arrayElemAt: [ "$result", -1 ] }}},
+   {$project: {winner_deck: { $cond: { if: { $gt: [ "$first", "$last"] }, then: "$players.right.deck", else: { $cond: { if: { $lt: [ "$first", "$last"] }, then: "$players.left.deck", else: null }} }}}},
+   { $unwind : "$winner_deck"},
+{$group : {_id : {$arrayElemAt: [ "$winner_deck", 0 ]} , count:{$sum:1}}  },
+   { $project: { _id: 1, count : 1} },
+   { $sort: { _id: -1 } },
+])
+
+Y por nivel del lado perdedor.
+
+db.matches.aggregate([
+   { $match:{'type': 'ladder'}},
+   {$project: {	"players.left.deck":1, "players.right.deck":1, 	first: { $arrayElemAt: [ "$result", 0 ] }, last: { $arrayElemAt: [ "$result", -1 ] }}},
+   {$project: {winner_deck: { $cond: { if: { $gt: [ "$first", "$last"] }, then: "$players.right.deck", else: { $cond: { if: { $lt: [ "$first", "$last"] }, then: "$players.left.deck", else: null }} }}}},
+   { $unwind : "$winner_deck"},
+   { $group: { _id: "$winner_deck", count: { $sum: 1 }}},
+   { $project: { _id: 1, count : 1} },
+   { $sort: { _id: -1 } },
+{ $group : { _id : { $arrayElemAt: [ "$_id", 0 ] }, levels: { $push: { $arrayElemAt: [ "$_id", 1 ] } }  ,count: { $push: "$count" } } },
+ { $sort: { _id: -1 } }
+])
+
+
