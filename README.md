@@ -45,29 +45,29 @@ Python is used to make the visual representation of the data, because of its eas
 
 We show some pipelines of the <code>MongoDB</code>'s queries made along with some interesting graphics made on <code>Python</code> with the collections obtained. The whole set of queries can be found on the repository on the `queries.txt` file.
 
-###### Players with the most played games on ladder type matches by descending order:
+##### Players with the most played games on ladder type matches by descending order:
 ![alt text](https://github.com/simaiden/2019-clashroyale-analytics/blob/master/figuras/MasPartidas.png)
 
-###### Decks played by a particular player
+##### Decks played by a particular player
 ![alt text](https://github.com/simaiden/2019-clashroyale-analytics/blob/master/figuras/MazosJugador.png)
 
 
-###### Results obtained by a player playing with a specific deck
+##### Results obtained by a player playing with a specific deck
 ![alt text](https://github.com/simaiden/2019-clashroyale-analytics/blob/master/figuras/ResultadosJugador.png)
 
 
-###### Times a card was played on a won match grouped by level
+##### Times a card was played on a won match grouped by level
 ![alt text](https://github.com/simaiden/2019-clashroyale-analytics/blob/master/figuras/WinPorCarta.png)
 
 
 For the graphics made, we show the winrate by level of specific cards, the use of specific cards by its level across all games, and the use histogram of all cards on won, lost and drawn matches.
 
-###### Cards histogram:
+##### Cards histogram:
 
 ![alt text](https://github.com/simaiden/2019-clashroyale-analytics/blob/master/figuras/all_played_cards.png)
 
 
-###### Winrate:
+##### Winrate:
 
 ![alt text](https://github.com/simaiden/2019-clashroyale-analytics/blob/master/figuras/knight_bars.png)
 
@@ -78,7 +78,7 @@ For the graphics made, we show the winrate by level of specific cards, the use o
 ![alt text](https://github.com/simaiden/2019-clashroyale-analytics/blob/master/figuras/fireball_bars.png)
 
 
-###### Cards use by level:
+##### Cards use by level:
 
 ![alt text](https://github.com/simaiden/2019-clashroyale-analytics/blob/master/figuras/thelog.png)
 
@@ -87,10 +87,12 @@ For the graphics made, we show the winrate by level of specific cards, the use o
 
 ## Conclusion
 
+We developed a way to obtain useful statistics about the Clash Royale mobile game using <code> MongoDB </code> by generating queries and defining functions to obtain some interesting data about the outcome of games and players and use this data to represent it in a more visually appealing way via <code> Python </code> to give it (potentially) to players and enhance their gameplay. Taking this into account, we consider the objective of the project as achieved but not easily achieved: the main difficulty was in fact using <code> MongoDB </code> due to its complex syntax which wasn't very clear for the team in many cases.
 
+Respect to the database, we found that higher level cards were played much more times than low level cards, resulting in not having much info about the latter so the graphics made could not have been very informative. An even bigger database would help for this purpose, but for effects of the course it was sufficient.
 
-Summarise main lessons learnt. What was easy? What was difficult? What could have been done better or more efficiently?
+Finally, the project development was considered as a good instance to further learn about the tools used on the course, because it pushed us much farther than the laboratories did, having acquired a vast knowledge about <code> MongoDB </code>, hoping that it would come as useful on our carees through our lifes. 
 
 ## Appendix
 
-You can use this for key code snippets that you don't want to clutter the main text.
+See `queries.txt` on this repository to see all the queries made for the development of this project.
