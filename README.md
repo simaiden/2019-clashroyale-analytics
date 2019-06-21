@@ -45,19 +45,45 @@ Python is used to make the visual representation of the data, because of its eas
 
 We show some pipelines of the <code>MongoDB</code>'s queries made along with some interesting graphics made on <code>Python</code> with the collections obtained. The whole set of queries can be found on the repository on the `queries.txt` file.
 
-Players with the most played games on ladder type matches by descending order:
+###### Players with the most played games on ladder type matches by descending order:
 ![alt text](https://github.com/simaiden/2019-clashroyale-analytics/blob/master/figuras/MasPartidas.png)
 
-Decks played by a particular player
+###### Decks played by a particular player
 ![alt text](https://github.com/simaiden/2019-clashroyale-analytics/blob/master/figuras/MazosJugador.png)
 
 
-Results obtained by a player playing with a specific deck
+###### Results obtained by a player playing with a specific deck
 ![alt text](https://github.com/simaiden/2019-clashroyale-analytics/blob/master/figuras/ResultadosJugador.png)
 
 
-Times a card was played on a won match grouped by level
+###### Times a card was played on a won match grouped by level
 ![alt text](https://github.com/simaiden/2019-clashroyale-analytics/blob/master/figuras/WinPorCarta.png)
+
+
+For the graphics made, we show the winrate by level of specific cards, the use of specific cards by its level across all games, and the use histogram of all cards on won, lost and drawn matches.
+
+###### Cards histogram:
+
+![alt text](https://github.com/simaiden/2019-clashroyale-analytics/blob/master/figuras/all_played_cards.png)
+
+
+###### Winrate:
+
+![alt text](https://github.com/simaiden/2019-clashroyale-analytics/blob/master/figuras/knight_bars.png)
+
+![alt text](https://github.com/simaiden/2019-clashroyale-analytics/blob/master/figuras/thelog_bars.png)
+
+![alt text](https://github.com/simaiden/2019-clashroyale-analytics/blob/master/figuras/zap_bars.png)
+
+![alt text](https://github.com/simaiden/2019-clashroyale-analytics/blob/master/figuras/fireball_bars.png)
+
+
+###### Cards use by level:
+
+![alt text](https://github.com/simaiden/2019-clashroyale-analytics/blob/master/figuras/thelog.png)
+
+![alt text](https://github.com/simaiden/2019-clashroyale-analytics/blob/master/figuras/knight.png)
+
 
 ## Conclusion
 
