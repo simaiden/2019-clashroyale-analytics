@@ -7,7 +7,6 @@ Analysis of Clash Royale matchs to generate useful statistics. (Simón Sepúlved
 
 In this project we work with a Clash Royale Matches dataset which contains about 700k records of matches. The main objetive is to generate useful statics about the cards and decks performance like the most winning/losing cards/decks, the most used/unused cards, etc. With this information we generate graphics and tables for a good results visualization. 
 
-State what is the main goal of the project. State what sorts of question(s) you want to answer or what sort of system you want to build. (Questions may be non-technical -- e.g., is there a global correlation between coffee consumption and research output -- so long as they require data analysis or other technical solutions.)
 
 ## Data
 
@@ -26,31 +25,43 @@ Each tuple contains:
     - `trophy`: The player ladder trophies. 
     - `clan`: The player clan.
     - `name`: The player name.
-- `type`: The match type. Can be `ladder`, `challengue` or `tournament`.
+- `type`: The match type. Can be `ladder`, `challenge` or `tournament`.
 - `result`: The result of the match in the format `[left,right]`. It can be all combinations beetween `3-0` and `0-3`.
 - `time`: The date when match was played.
 
 Also we work with a dataset that contains the attributes of each cards as the Elixir cost, the card type, the card damage, etc. This dataset is used only for add useful information but not for querying. This dataset can be found it at <url>https://www.kaggle.com/swappyk/clash-royale-dataset</url> .
 
 
-Describe the raw dataset that you considered for your project. Where did it come from? Why was it chosen? What information does it contain? What format was it in? What size was it? How many lines/records? Provide links.
-
 ## Methods
 
 MongoDB is used to process the queries made because of its compatibility with the data's format and its already available by the course's faculty members for which this project is developed. 
 
-For each desired statistic a pipeline is designed, which is presented on `Results` with a description of each stage and the resulting table (collection).
+For each desired statistic a pipeline is designed, which is presented on `Results` with a description of the resulting table (collection).
 
 Python is used to make the visual representation of the data, because of its ease of use for the team and its variety of methods to further process the data (only for ordering, no further data is collected here). For this,we use the <code>matplotlib</code> library  for plotting, <code>pandas</code> and <code>json</code> for loading the exported results and <code>numpy</code> for data processing. This last library is needed because the results are not always congruent between queries: for example on certain matches or kind of cards not all levels are on the databse because of its rarity, so we need to complete or truncate certain results.
 
 
-Detail the methods used during the project. Provide an overview of the techniques/technologies used, why you used them and how you used them. Refer to the source-code delivered with the project. Describe any problems you encountered.
-
 ## Results
 
-Detail the results of the project. Different projects will have different types of results; e.g., run-times or result sizes, evaluation of the methods you're comparing, the interface of the system you've built, and/or some of the results of the data analysis you conducted.
+We show some pipelines of the <code>MongoDB</code>'s queries made along with some interesting graphics made on <code>Python</code> with the collections obtained. The whole set of queries can be found on the repository on the `queries.txt` file.
+
+Players with the most played games on ladder type matches by descending order:
+![alt text](https://github.com/simaiden/2019-clashroyale-analytics/blob/master/figuras/MasPartidas.png)
+
+Decks played by a particular player
+![alt text](https://github.com/simaiden/2019-clashroyale-analytics/blob/master/figuras/MazosJugador.png)
+
+
+Results obtained by a player playing with a specific deck
+![alt text](https://github.com/simaiden/2019-clashroyale-analytics/blob/master/figuras/ResultadosJugador.png)
+
+
+Times a card was played on a won match grouped by level
+![alt text](https://github.com/simaiden/2019-clashroyale-analytics/blob/master/figuras/WinPorCarta.png)
 
 ## Conclusion
+
+
 
 Summarise main lessons learnt. What was easy? What was difficult? What could have been done better or more efficiently?
 
